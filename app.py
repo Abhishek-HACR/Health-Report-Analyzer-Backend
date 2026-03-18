@@ -45,27 +45,10 @@ def home():
     return "Medical Report Analyzer API is running"
 
 
-# @app.route("/analyze", methods=["POST"])
-# def analyze():
-
-#     if "file" not in request.files:
-#         return jsonify({"error": "No file uploaded"}), 400
-
-#     file = request.files["file"]
-
-#     path = os.path.join("uploads", file.filename)
-#     file.save(path)
-
-#     text = extract_text_from_pdf(path)
-
-#     result = analyze_medical_report(text)
-
-#     return jsonify({
-#         "analysis": result
-#     })
-
 @app.route("/analyze", methods=["POST"])
 def analyze():
+    
+    os.makedirs("uploads", exist_ok=True)
 
     print("Request received")
 
@@ -128,5 +111,7 @@ User question:
     answer = response.choices[0].message.content
     return jsonify({"answer": answer})
 
+
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
